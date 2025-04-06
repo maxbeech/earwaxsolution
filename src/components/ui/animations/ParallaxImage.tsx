@@ -1,7 +1,7 @@
 'use client';
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import OptimizedImage from '@/components/ui/OptimizedImage';
+import Image from 'next/image';
 
 interface ParallaxImageProps {
   src: string;
@@ -9,9 +9,6 @@ interface ParallaxImageProps {
   className?: string;
   speed?: number;
   direction?: 'up' | 'down';
-  width?: number;
-  height?: number;
-  fill?: boolean;
 }
 
 export default function ParallaxImage({
@@ -20,9 +17,6 @@ export default function ParallaxImage({
   className = '',
   speed = 0.3,
   direction = 'down',
-  width,
-  height,
-  fill = false,
 }: ParallaxImageProps) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -30,27 +24,28 @@ export default function ParallaxImage({
     offset: ['start end', 'end start'],
   });
   
-  // Apply the parallax effect based on scroll position
-  const factor = direction === 'up' ? -speed * 100 : speed * 100;
+  // Apply a much gentler parallax effect and limit the range to prevent image from moving out of view
+  const factor = direction === 'up' ? -speed * 20 : speed * 20; // Reduced from 100 to 20
   const y = useTransform(scrollYProgress, [0, 1], [0, factor]);
-
+  
   return (
     <motion.div
       ref={ref}
-      className={`relative overflow-hidden ${className}`}
-      style={{ width: fill ? '100%' : width, height: fill ? '100%' : height }}
+      className={`relative w-full h-full overflow-hidden ${className}`}
     >
       <motion.div 
-        className="w-full h-full"
+        className="absolute inset-0 w-full h-full"
         style={{ y }}
+        initial={{ opacity: 1 }} // Ensure image starts visible
+        animate={{ opacity: 1 }} // Keep it visible during animation
       >
-        <OptimizedImage
+        <Image
           src={src}
           alt={alt}
-          width={fill ? undefined : width}
-          height={fill ? undefined : height}
-          fill={fill}
-          className="object-cover"
+          fill={true}
+          className="object-cover w-full h-full"
+          sizes="100vw"
+          priority={true}
         />
       </motion.div>
     </motion.div>

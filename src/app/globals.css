@@ -27,6 +27,38 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+/* Hero section spacing */
+.hero-section {
+  min-height: 60vh;
+  padding-top: 120px; /* Ensures content is visible below fixed header */
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  overflow: hidden; /* Keep overflow hidden to prevent image bleed */
+}
+
+.hero-content {
+  padding-top: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Force hero background to remain visible */
+.hero-section .absolute.inset-0 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* Ensure the overlay stays in place */
+.hero-section .bg-black\/50 {
+  z-index: 2;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

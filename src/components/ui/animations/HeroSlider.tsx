@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import OptimizedImage from '@/components/ui/OptimizedImage';
+import Image from 'next/image';
 
 interface HeroSliderProps {
   images: { src: string; alt: string }[];
@@ -33,12 +33,13 @@ export default function HeroSlider({
   if (images.length === 1) {
     return (
       <div className={`relative w-full h-full ${className}`}>
-        <OptimizedImage
+        <Image
           src={images[0].src}
           alt={images[0].alt}
           fill
           className="object-cover"
           priority
+          sizes="100vw"
         />
       </div>
     );
@@ -60,12 +61,13 @@ export default function HeroSlider({
           }}
           className="absolute inset-0"
         >
-          <OptimizedImage
+          <Image
             src={images[currentIndex].src}
             alt={images[currentIndex].alt}
             fill
             className="object-cover"
             priority={currentIndex === 0}
+            sizes="100vw"
           />
         </motion.div>
       </AnimatePresence>
