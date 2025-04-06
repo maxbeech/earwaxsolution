@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaBars, FaTimes, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FaBars, FaTimes, FaPhone, FaEnvelope, FaCalendarAlt } from 'react-icons/fa';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -10,21 +10,37 @@ import { useInView } from 'react-intersection-observer';
 const navItems = [
   { name: 'Home', path: '/' },
   { 
-    name: 'About', 
+    name: 'About Us', 
     path: '/about',
+    subItems: [
+      { name: 'Our Clinic', path: '/about/our-clinic' },
+      { name: 'Our Specialists', path: '/about/specialists' },
+      { name: 'Patient Testimonials', path: '/about/testimonials' },
+    ]
   },
   { 
-    name: 'Services', 
+    name: 'Our Services', 
     path: '/services',
     subItems: [
-      { name: 'Our Services', path: '/services' },
-      { name: 'Curtains', path: '/services/curtains' },
-      { name: 'Blinds', path: '/services/blinds' },
-      { name: 'Soft Furnishings', path: '/services/soft-furnishings' },
-      { name: 'Tracks and Poles', path: '/services/tracks-and-poles' },
+      { name: 'Microsuction', path: '/services/microsuction' },
+      { name: 'Ear Irrigation', path: '/services/irrigation' },
+      { name: 'Ear Examination', path: '/services/examination' },
+      { name: 'Hearing Health Advice', path: '/services/hearing-health' },
+      { name: 'Home Visits', path: '/services/home-visits' },
     ] 
   },
-  { name: 'Portfolio', path: '/portfolio' },
+  { 
+    name: 'Patient Information', 
+    path: '/patient-info',
+    subItems: [
+      { name: 'Before Your Appointment', path: '/patient-info/before-appointment' },
+      { name: 'Pricing', path: '/patient-info/pricing' },
+      { name: 'Insurance & Referrals', path: '/patient-info/insurance' },
+      { name: 'Aftercare', path: '/patient-info/aftercare' },
+      { name: 'FAQs', path: '/patient-info/faqs' },
+    ] 
+  },
+  { name: 'Locations', path: '/locations' },
   { name: 'Contact', path: '/contact' }
 ];
 
@@ -55,9 +71,32 @@ export default function Header() {
     <header 
       ref={ref}
       className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-md py-2' : 'bg-black/40 backdrop-blur-sm py-4'
+        scrolled ? 'bg-white shadow-md py-2' : 'bg-white/95 backdrop-blur-sm py-4'
       }`}
     >
+      {/* Top contact bar */}
+      <div className={`hidden md:block bg-blue-600 text-white transition-all duration-300 ${scrolled ? 'h-0 overflow-hidden opacity-0' : 'h-auto opacity-100'}`}>
+        <div className="container mx-auto px-4 py-2">
+          <div className="flex justify-between items-center text-sm">
+            <div className="flex items-center space-x-6">
+              <a href="tel:01234567890" className="flex items-center hover:text-blue-100 transition-colors">
+                <FaPhone className="h-3 w-3 mr-2" />
+                <span>01234 567890</span>
+              </a>
+              <a href="mailto:info@earwaxsolution.co.uk" className="flex items-center hover:text-blue-100 transition-colors">
+                <FaEnvelope className="h-3 w-3 mr-2" />
+                <span>info@earwaxsolution.co.uk</span>
+              </a>
+            </div>
+            <div className="flex items-center space-x-4">
+              <a href="/locations" className="text-xs hover:text-blue-100">Find a Clinic</a>
+              <span className="text-blue-300">|</span>
+              <a href="/patient-info/faqs" className="text-xs hover:text-blue-100">FAQs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <motion.div
@@ -66,10 +105,10 @@ export default function Header() {
             transition={{ duration: 0.5 }}
           >
             <Link href="/" className="flex items-center">
-              <div className="h-16 w-16 relative">
+              <div className="h-16 w-48 relative">
                 <Image 
                   src="/images/logo.png" 
-                  alt="Bramble & Bay Logo" 
+                  alt="Earwax Solution Logo" 
                   fill
                   className="object-contain"
                   priority
@@ -92,8 +131,8 @@ export default function Header() {
                   <>
                     <button
                       onClick={() => handleDropdownToggle(item.name)}
-                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors hover:text-secondary 
-                        ${pathname?.startsWith(item.path) ? 'text-secondary' : scrolled ? 'text-gray-800' : 'text-white'}`}
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-600 
+                        ${pathname?.startsWith(item.path) ? 'text-blue-600' : 'text-gray-800'}`}
                     >
                       {item.name}
                       <span className="ml-1 text-xs">▼</span>
@@ -112,8 +151,8 @@ export default function Header() {
                               <Link
                                 key={subItem.name}
                                 href={subItem.path}
-                                className={`block px-4 py-3 text-sm transition-colors hover:bg-gray-50 hover:text-secondary 
-                                  ${pathname === subItem.path ? 'text-secondary font-medium bg-gray-50' : 'text-gray-800'}`}
+                                className={`block px-4 py-3 text-sm transition-colors hover:bg-gray-50 hover:text-blue-600 
+                                  ${pathname === subItem.path ? 'text-blue-600 font-medium bg-gray-50' : 'text-gray-800'}`}
                               >
                                 {subItem.name}
                               </Link>
@@ -126,8 +165,8 @@ export default function Header() {
                 ) : (
                   <Link
                     href={item.path}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors hover:text-secondary
-                      ${pathname === item.path ? 'text-secondary' : scrolled ? 'text-gray-800' : 'text-white'}`}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors hover:text-blue-600
+                      ${pathname === item.path ? 'text-blue-600' : 'text-gray-800'}`}
                   >
                     {item.name}
                   </Link>
@@ -140,17 +179,18 @@ export default function Header() {
               transition={{ duration: 0.5, delay: 0.6 }}
             >
               <Link
-                href="/contact"
-                className="ml-2 px-5 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-primary-600 transition-colors shadow-sm hover:shadow-md"
+                href="/book-appointment"
+                className="ml-2 px-5 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md flex items-center"
               >
-                Get a Quote
+                <FaCalendarAlt className="mr-2" />
+                Book Appointment
               </Link>
             </motion.div>
           </nav>
 
           {/* Mobile menu button */}
           <button
-            className="lg:hidden p-2 rounded-md text-gray-800 hover:text-secondary focus:outline-none"
+            className="lg:hidden p-2 rounded-md text-gray-800 hover:text-blue-600 focus:outline-none"
             onClick={toggleMobileMenu}
           >
             {mobileMenuOpen ? (
@@ -159,22 +199,6 @@ export default function Header() {
               <FaBars className="h-6 w-6" />
             )}
           </button>
-        </div>
-      </div>
-
-      {/* Top contact bar - moved to bottom of header */}
-      <div className={`hidden md:block bg-primary/90 text-white transition-all duration-300 mt-2 ${scrolled ? 'h-0 overflow-hidden opacity-0' : 'h-auto opacity-100'}`}>
-        <div className="container mx-auto px-4 py-1">
-          <div className="flex justify-end items-center space-x-6 text-sm">
-            <a href="tel:07490934251" className="flex items-center hover:text-gray-200 transition-colors">
-              <FaPhone className="h-3 w-3 mr-2" />
-              <span>07490 934251</span>
-            </a>
-            <a href="mailto:suzy@brambleandbay.co.uk" className="flex items-center hover:text-gray-200 transition-colors">
-              <FaEnvelope className="h-3 w-3 mr-2" />
-              <span>suzy@brambleandbay.co.uk</span>
-            </a>
-          </div>
         </div>
       </div>
 
@@ -196,7 +220,7 @@ export default function Header() {
                       <button
                         onClick={() => handleDropdownToggle(item.name)}
                         className={`w-full text-left px-3 py-3 rounded-md text-base font-medium flex justify-between items-center
-                          ${pathname?.startsWith(item.path) ? 'text-secondary' : 'text-gray-800'}`}
+                          ${pathname?.startsWith(item.path) ? 'text-blue-600' : 'text-gray-800'}`}
                       >
                         {item.name}
                         <span className="ml-1 text-xs">▼</span>
@@ -215,7 +239,7 @@ export default function Header() {
                                 key={subItem.name}
                                 href={subItem.path}
                                 className={`block px-3 py-3 rounded-md text-base font-medium border-l-2 border-gray-200
-                                  ${pathname === subItem.path ? 'text-secondary border-secondary' : 'text-gray-700'}`}
+                                  ${pathname === subItem.path ? 'text-blue-600 border-blue-600' : 'text-gray-700'}`}
                                 onClick={toggleMobileMenu}
                               >
                                 {subItem.name}
@@ -229,7 +253,7 @@ export default function Header() {
                     <Link
                       href={item.path}
                       className={`block px-3 py-3 rounded-md text-base font-medium
-                        ${pathname === item.path ? 'text-secondary' : 'text-gray-800'}`}
+                        ${pathname === item.path ? 'text-blue-600' : 'text-gray-800'}`}
                       onClick={toggleMobileMenu}
                     >
                       {item.name}
@@ -237,6 +261,16 @@ export default function Header() {
                   )}
                 </div>
               ))}
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <Link
+                  href="/book-appointment"
+                  className="w-full flex items-center justify-center px-5 py-3 bg-blue-600 text-white rounded-md text-base font-medium hover:bg-blue-700 transition-colors"
+                  onClick={toggleMobileMenu}
+                >
+                  <FaCalendarAlt className="mr-2" />
+                  Book Appointment
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
